@@ -1232,7 +1232,7 @@ type ScorePermissionOpenidQuery struct {
 }
 
 type ComplaintList struct {
-	Data       []*ComplaintListItem `json:"data,omitempty"`        // 用户投诉信息详情
+	Data       []*ComplaintListItem2 `json:"data"`        // 用户投诉信息详情
 	Limit      int                  `json:"limit"`                 // 设置该次请求返回的最大投诉条数，范围【1,50】
 	Offset     int                  `json:"offset"`                // 该次请求的分页开始位置，从0开始计数，例如offset=10，表示从第11条记录开始返回。
 	TotalCount int                  `json:"total_count,omitempty"` // 投诉总条数，当offset=0时返回
@@ -1250,10 +1250,29 @@ type ComplaintListItem struct {
 	UserComplaintTimes    int                   `json:"user_complaint_times"`           // 用户投诉次数
 }
 
+type ComplaintListItem2 struct {
+	ComplaintId           string                `json:"complaint_id"`                   // 投诉单对应的投诉单号
+	ComplaintTime         string                `json:"complaint_time"`                 // 投诉时间, 例如：2015-05-20T13:29:35.120+08:00表示北京时间2015年05月20日13点29分35秒
+	ComplaintDetail       string                `json:"complaint_detail"`               // 投诉的具体描述
+	ComplaintState        string                `json:"complaint_state"`                // 投诉单状态, PENDING：待处理, PROCESSING：处理中, PROCESSED：已处理完成
+	PayerPhone            string                `json:"payer_phone"`          // 投诉人联系方式。该字段已做加密处理
+	ComplaintOrderInfo    []*ComplaintOrderInfo `json:"complaint_order_info"` // 投诉单关联订单信息
+	ComplaintMediaList    []*ComplaintMediaInfo `json:"complaint_media_list"`
+	ComplaintFullRefunded bool                  `json:"complaint_full_refunded"`        // 投诉单下所有订单是否已全部全额退款
+	ProblemDescription    string                `json:"problem_description"`
+	IncomingUserResponse  bool                  `json:"incoming_user_response"`         // 投诉单是否有待回复的用户留言
+	UserComplaintTimes    int                   `json:"user_complaint_times"`           // 用户投诉次数
+}
+
 type ComplaintOrderInfo struct {
 	TransactionId string `json:"transaction_id"` // 投诉单关联的微信订单号
 	OutTradeNo    string `json:"out_trade_no"`   // 投诉单关联的商户订单号
 	Amount        int    `json:"amount"`         // 订单金额，单位（分）
+}
+
+type ComplaintMediaInfo struct {
+	MediaType string   `json:"media_type"`
+	MediaUrl  []string `json:"media_url"`
 }
 
 type ComplaintDetail struct {
